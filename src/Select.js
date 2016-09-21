@@ -310,10 +310,10 @@ var Select = React.createClass({
 		if (focusAfterUpdate || focusAfterUpdate === undefined) {
 			this._focusAfterUpdate = true;
 		}
+		var prevState = this.state;
 		var newState = this.getStateFromValue(value);
 		newState.isOpen = false;
-		this.fireChangeEvent(newState);
-		this.setState(newState);
+		this.setState(newState, function () { this.fireChangeEvent(prevState); });
 	},
 
 	selectValue (value) {
@@ -359,9 +359,9 @@ var Select = React.createClass({
 		return this.props.searchable ? input : ReactDOM.findDOMNode(input);
 	},
 
-	fireChangeEvent (newState) {
-		if (newState.value !== this.state.value && this.props.onChange) {
-			this.props.onChange(newState.value, newState.values);
+	fireChangeEvent (prevState) {
+		if (prevState.value !== this.state.value && this.props.onChange) {
+			this.props.onChange(this.state.value, this.state.values);
 		}
 	},
 
